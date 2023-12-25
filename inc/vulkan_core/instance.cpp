@@ -1,5 +1,7 @@
 #include "instance.hpp"
 
+#include "logger.hpp"
+
 namespace v {
 
 VkApplicationInfo Instance::createAppInfo() {
@@ -51,6 +53,7 @@ Instance::Instance() {
 
   // verify that required layers are present.
   if (!instanceLayersSupported(instanceLayerNames)) {
+    ERR("Hardware cannot support required layers");
   }
 }
 
