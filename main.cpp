@@ -1,5 +1,5 @@
-#include <vulkan/vulkan.h>
-
 #include <iostream>
 
-int main() { VkInstance instance; }
+#include "antuco.hpp"
+
+int main() { Antuco *antuco = Antuco::get(); }

@@ -15,6 +15,8 @@ file (GLOB_RECURSE HEADER_FILES inc/*.hpp)
 
 # add fmt to project
 add_subdirectory(${PROJECT_SOURCE_DIR}/external/fmt)
+# add glfw to project
+add_subdirectory(${PROJECT_SOURCE_DIR}/external/glfw)
 
 # create library from project source files and header files
 add_library(project_lib ${SOURCE_FILES} ${HEADER_FILES})
@@ -23,7 +25,9 @@ add_library(project_lib ${SOURCE_FILES} ${HEADER_FILES})
 target_include_directories(project_lib PUBLIC "${Vulkan_INCLUDE_DIRS}" ${PROJECT_SOURCE_DIR}/inc)
 
 # link external libraries for project source files
-target_link_libraries(project_lib PUBLIC ${Vulkan_LIBRARIES} fmt::fmt)
+target_link_libraries(project_lib PUBLIC ${Vulkan_LIBRARIES} 
+                                          fmt::fmt 
+                                          glfw)
 
 # compile exe
 add_executable(${PROJECT_NAME} main.cpp ${SOURCE_FILES} ${HEADER_FILES})
@@ -34,7 +38,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/inc ${Vu
 # link libraries
 target_link_libraries(${PROJECT_NAME} PUBLIC ${Vulkan_LIBRARIES} 
                                               project_lib
-                                              fmt::fmt)
+                                              fmt::fmt
+                                              glfw)
 
 # move compile_commands.json (required for intellisense) to project source dir
 if (EXISTS ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json)

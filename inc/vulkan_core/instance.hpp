@@ -11,21 +11,25 @@ namespace v {
 class Instance {
  public:
   Instance();
-  ~Instance() = default;
+  ~Instance();
 
  private:
   VkApplicationInfo createAppInfo();
   bool instanceLayersSupported(std::vector<const char *> &layerNames);
+  bool extensionsSupported(std::vector<const char *> &extensions);
 
  private:
   // set validation layer
 #ifdef NDEBUG
-  bool enableValidation = false;
+  bool m_enableValidation = false;
 #else
-  bool enableValidation = true;
+  bool m_enableValidation = true;
 #endif
 
-  std::vector<const char *> instanceLayerNames;
+  std::vector<const char *> m_instanceLayerNames;
+  std::vector<const char *> m_extensionNames;
+
+  VkInstance m_instance;
 };
 
 }  // namespace v
