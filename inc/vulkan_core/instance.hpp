@@ -18,6 +18,8 @@ class Instance {
   bool instanceLayersSupported(std::vector<const char *> &layerNames);
   bool extensionsSupported(std::vector<const char *> &extensions);
 
+  void populateDebugMessageData(VkDebugUtilsMessengerCreateInfoEXT &info);
+
  private:
   // set validation layer
 #ifdef NDEBUG

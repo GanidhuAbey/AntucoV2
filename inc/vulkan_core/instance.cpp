@@ -51,6 +51,15 @@ bool Instance::extensionsSupported(std::vector<const char *> &extensions) {
   return true;
 }
 
+VKAPI_ATTR VkBool32 VKAPI_CALL
+printValidationError(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                     VkDebugUtilsMessageTypeFlagsEXT messageType,
+                     const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
+                     void *pUserData) {
+  fmt::print(stderr, "Validation Error: {}\n", pCallbackData->pMessage);
+
+  return VK_FALSE;
+}
 bool Instance::instanceLayersSupported(std::vector<const char *> &layerNames) {
   // get all supported layers by hardware
   uint32_t supportedLayerCount = 0;
@@ -78,12 +87,35 @@ bool Instance::instanceLayersSupported(std::vector<const char *> &layerNames) {
   return true;
 }
 
+void Instance::populateDebugMessageData(
+    VkDebugUtilsMessengerCreateInfoEXT &info) {
+  // Add debug messages
+  info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+  info.pNext = nullptr;
+  info.flags = 0;
+  info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                         VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+  info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                     VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                     VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+  info.pfnUserCallback = &printValidationError;
+  info.pUserData = nullptr;
+}
+
 Instance::Instance() {
   VkApplicationInfo app_info = createAppInfo();
 
-  // add validation layers
+  VkInstanceCreateInfo info{};
+  VkDebugUtilsMessengerCreateInfoEXT debugInfo{};
+
+  // enable validation layers.
   if (m_enableValidation) {
     m_instanceLayerNames.push_back(VULKAN_VALIDATION_LAYER_NAME);
+
+    populateDebugMessageData(debugInfo);
+    info.pNext = &debugInfo;
+  } else {
+    info.pNext = nullptr;
   }
 
   // verify that required layers are present.
@@ -101,9 +133,7 @@ Instance::Instance() {
     ERR("Hardware cannot support required extensions");
   }
 
-  VkInstanceCreateInfo info{};
   info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-  info.pNext = nullptr;
   info.flags = {};
   info.pApplicationInfo = &app_info;
   info.enabledLayerCount = m_instanceLayerNames.size();
