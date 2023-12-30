@@ -13,12 +13,18 @@ class Instance {
   Instance();
   ~Instance();
 
+  // There should only ever exist one copy of v::Instance per every
+  // vkInstance.
+  Instance(Instance &) = delete;
+
  private:
   VkApplicationInfo createAppInfo();
   bool instanceLayersSupported(std::vector<const char *> &layerNames);
   bool extensionsSupported(std::vector<const char *> &extensions);
 
   void populateDebugMessageData(VkDebugUtilsMessengerCreateInfoEXT &info);
+
+  VkInstance get() { return m_instance; }
 
  private:
   // set validation layer

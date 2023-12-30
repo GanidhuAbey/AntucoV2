@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vulkan_core/instance.hpp"
+#include "window.hpp"
 
 namespace Engine {
 
@@ -8,6 +9,8 @@ class Render {
  public:
   ~Render() = default;
   static Render *get() { return &m_render; };
+
+  void createWindowSurface(UI::Window &window);
 
  private:
   Render();

@@ -56,7 +56,8 @@ printValidationError(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                      VkDebugUtilsMessageTypeFlagsEXT messageType,
                      const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
                      void *pUserData) {
-  fmt::print(stderr, "Validation Error: {}\n", pCallbackData->pMessage);
+  // fmt::print(stderr, "Validation Error: {}\n", pCallbackData->pMessage);
+  ERR_LOG("Validation Error: {}", pCallbackData->pMessage);
 
   return VK_FALSE;
 }
