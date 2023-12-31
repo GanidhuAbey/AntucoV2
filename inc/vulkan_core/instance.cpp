@@ -110,14 +110,14 @@ Instance::Instance() {
   VkDebugUtilsMessengerCreateInfoEXT debugInfo{};
 
   // enable validation layers.
-  if (m_enableValidation) {
-    m_instanceLayerNames.push_back(VULKAN_VALIDATION_LAYER_NAME);
+#ifdef VALIDATION_ENABLED
+  m_instanceLayerNames.push_back(VULKAN_VALIDATION_LAYER_NAME);
 
-    populateDebugMessageData(debugInfo);
-    info.pNext = &debugInfo;
-  } else {
-    info.pNext = nullptr;
-  }
+  populateDebugMessageData(debugInfo);
+  info.pNext = &debugInfo;
+#else
+  info.pNext = nullptr;
+#endif
 
   // verify that required layers are present.
   if (!instanceLayersSupported(m_instanceLayerNames)) {

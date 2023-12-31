@@ -4,19 +4,27 @@
 #include <fmt/core.h>
 
 #ifndef NDEBUG
-#define WARN(...)                                                            \
-  fmt::print(fg(fmt::color::yellow), "[WARNING ( {}() )] - {} \n", __func__, \
-             __VA_ARGS__)
+#define WARN(...)                                                        \
+  fmt::print(fg(fmt::color::yellow), "[WARNING ( {}() )] - ", __func__); \
+  fmt::print(__VA_ARGS__);                                               \
+  fmt::print("\n")
 #define ERR(...)                                                    \
   fmt::print(stderr, fg(fmt::color::crimson) | fmt::emphasis::bold, \
-             "[ERROR ( {}() )] - {} \n", __func__, __VA_ARGS__);    \
+             "[ERROR ( {}() )] - ", __func__);                      \
+  fmt::print(__VA_ARGS__);                                          \
+  fmt::print("\n");                                                 \
   assert(false)
 
 #define ERR_LOG(...)                                                \
   fmt::print(stderr, fg(fmt::color::crimson) | fmt::emphasis::bold, \
-             "[ERROR ( {}() )] - {} \n", __func__, __VA_ARGS__)
+             "[ERROR ( {}() )] - ", __func__);                      \
+  fmt::print(__VA_ARGS__);                                          \
+  fmt::print("\n")
 
-#define INFO(...) fmt::print("[INFO ( {}() )] - {} \n", __func__, __VA_ARGS__)
+#define INFO(...)                             \
+  fmt::print("[INFO ( {}() )] - ", __func__); \
+  fmt::print(__VA_ARGS__);                    \
+  fmt::print("\n")
 #else
 #define WARN(...)  // nothing
 #define ERR(...)   // nothing

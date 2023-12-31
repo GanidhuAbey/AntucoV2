@@ -8,6 +8,14 @@ namespace Engine {
 
 namespace UI {
 
+enum KeyInput {
+  W = GLFW_KEY_W,
+  A = GLFW_KEY_A,
+  S = GLFW_KEY_S,
+  D = GLFW_KEY_D,
+  Q = GLFW_KEY_Q,
+};
+
 class Window {
  public:
   Window() { m_window = nullptr; };
@@ -18,7 +26,11 @@ class Window {
 
   void createSurface(v::Instance &instance);
 
+  void close();
   bool shouldClose();
+  void pollEvents();
+
+  bool isKeyPressed(KeyInput key);
 
  private:
   GLFWwindow *m_window;

@@ -8,7 +8,7 @@ namespace UI {
 
 Window::~Window() { glfwTerminate(); }
 
-static void glfwError(int id, const char *description) { ERR(description); }
+static void glfwError(int id, const char *description) { ERR_LOG(description); }
 
 void Window::create(int width, int height, const char *title) {
   m_width = width;
@@ -35,7 +35,12 @@ void Window::createSurface(v::Instance &instance) {
   m_surface = v::Surface(instance, m_window);
 }
 
+void Window::close() { glfwSetWindowShouldClose(m_window, GLFW_TRUE); }
 bool Window::shouldClose() { return glfwWindowShouldClose(m_window); }
+void Window::pollEvents() { glfwPollEvents(); }
+bool Window::isKeyPressed(KeyInput key) {
+  return glfwGetKey(m_window, key) == GLFW_PRESS;
+}
 
 }  // namespace UI
 

@@ -10,6 +10,10 @@ int main() {
   Engine::UI::Window *window = antuco->createWindow(800, 600, "hello world");
 
   while (!window->shouldClose()) {
-    glfwPollEvents();
+    window->pollEvents();
+
+    if (window->isKeyPressed(Engine::UI::KeyInput::Q)) {
+      window->close();
+    }
   }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vulkan_core/instance.hpp"
+#include "vulkan_core/physical_device.hpp"
 #include "window.hpp"
 
 namespace Engine {
@@ -20,6 +21,7 @@ class Render {
 
  private:
   v::Instance m_instance;
+  v::PhysicalDevice m_physicalDevice;
 };
 
 }  // namespace Engine
