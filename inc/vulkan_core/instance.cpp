@@ -17,7 +17,7 @@ VkApplicationInfo Instance::createAppInfo() {
   info.applicationVersion = 1;
   info.pEngineName = "Antuco";
   info.engineVersion = 1;
-  info.apiVersion = VK_API_VERSION_1_3;
+  info.apiVersion = VK_API_VERSION_1_2;
 
   return info;
 }
@@ -56,11 +56,11 @@ printValidationError(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                      VkDebugUtilsMessageTypeFlagsEXT messageType,
                      const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
                      void *pUserData) {
-  // fmt::print(stderr, "Validation Error: {}\n", pCallbackData->pMessage);
   ERR_LOG("Validation Error: {}", pCallbackData->pMessage);
 
   return VK_FALSE;
 }
+
 bool Instance::instanceLayersSupported(std::vector<const char *> &layerNames) {
   // get all supported layers by hardware
   uint32_t supportedLayerCount = 0;
@@ -128,7 +128,12 @@ Instance::Instance() {
   uint32_t extCount;
   const char **glfwExt = glfwGetRequiredInstanceExtensions(&extCount);
   m_extensionNames.resize(extCount);
-  memcpy(m_extensionNames.data(), glfwExt, extCount);
+  memcpy(m_extensionNames.data(), glfwExt, sizeof(glfwExt) * extCount);
+
+  // add required extension for validation debug messenger.
+#ifdef VALIDATION_ENABLED
+  m_extensionNames.push_back("VK_EXT_debug_utils");
+#endif
 
   if (!extensionsSupported(m_extensionNames)) {
     ERR("Hardware cannot support required extensions");

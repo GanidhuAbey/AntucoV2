@@ -7,21 +7,27 @@
 namespace Engine {
 
 class Render {
- public:
-  ~Render() = default;
-  static Render *get() { return &m_render; };
+public:
+	~Render();
+	static Render *get() {
+		if (!m_render) {
+			m_render = new Render();
+		}
 
-  void createWindowSurface(UI::Window &window);
+		return m_render;
+	};
 
- private:
-  Render();
-  Render(const Render &) = delete;
+	void createWindowSurface(UI::Window &window);
 
-  static Render m_render;
+private:
+	Render();
+	Render(const Render &) = delete;
 
- private:
-  v::Instance m_instance;
-  v::PhysicalDevice m_physicalDevice;
+	static Render* m_render;
+
+private:
+	v::Instance m_instance;
+	v::PhysicalDevice m_physicalDevice;
 };
 
 }  // namespace Engine
